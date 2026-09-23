@@ -1,1 +1,1344 @@
+<!DOCTYPE html>
+<!-- saved from url=(0045)https://hospitalschedulingreport.netlify.app/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<!-- This site is hosted on Netlify. Anyone can build and deploy a site
+     like this one for free: https://netlify.new/?utm_campaign=loops&utm_source=ai-legible&utm_medium=owned&utm_content=comment&utm_id=cd9599a1-604d-4860-8f98-ef371a8ef043
+     Netlify hosting facts for this site: static/SSR served via Netlify Edge. -->
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cleaning &amp; Facility Operations Manager</title>
+    <!-- Firebase JS SDK (v8) -->
+    <script src="./Cleaning &amp; Facility Operations Manager_files/firebase-app.js.download"></script>
+    <script src="./Cleaning &amp; Facility Operations Manager_files/firebase-database.js.download"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+        body { background-color: #f8fafc; color: #0f172a; min-height: 100vh; display: flex; flex-direction: column; }
+        
+        header { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
+        
+        /* TOP NAVIGATION BAR */
+        .nav-bar { background-color: #ffffff; border-bottom: 1px solid #e2e8f0; padding: 8px 24px; display: flex; gap: 8px; overflow-x: auto; flex-wrap: nowrap; }
+        .nav-btn { background: none; border: 1px solid transparent; color: #64748b; padding: 8px 14px; border-radius: 6px; font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; white-space: nowrap; user-select: none; }
+        .nav-btn:hover { color: #0f172a; background-color: #f1f5f9; }
+        .nav-btn.active { background-color: #0d9488; color: #ffffff; border-color: #0d9488; }
 
+        /* FILTER & METADATA BAR */
+        .filter-bar { background-color: #f1f5f9; border-bottom: 1px solid #e2e8f0; padding: 12px 24px; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; font-size: 13px; }
+        .filter-item { display: flex; align-items: center; gap: 8px; }
+        .filter-item label { color: #475569; font-weight: 600; font-size: 12px; }
+        .filter-item input, .filter-item select { margin: 0 !important; width: auto !important; padding: 6px 10px !important; background-color: #ffffff !important; color: #0f172a !important; border: 1px solid #cbd5e1 !important; border-radius: 6px; }
+
+        /* SHIFT ROTATION TOGGLE BUTTONS */
+        .shift-btn-group { display: flex; gap: 4px; background: #e2e8f0; padding: 4px; border-radius: 6px; border: 1px solid #cbd5e1; }
+        .shift-btn { background: none; border: none; color: #475569; padding: 6px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .shift-btn:hover { color: #0f172a; background: #ffffff; }
+        .shift-btn.active { background-color: #0d9488; color: #ffffff; }
+
+        /* TAB PANELS */
+        main { flex: 1; padding: 24px; max-width: 1300px; margin: 0 auto; width: 100%; }
+        .tab-panel { display: none !important; }
+        .tab-panel.active { display: block !important; }
+
+        /* UI COMPONENTS */
+        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+        .card { background-color: #ffffff; border: 1px solid #e2e8f0; padding: 20px; border-radius: 10px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+        .card h3 { font-size: 24px; font-weight: bold; margin-top: 8px; }
+        
+        table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #e2e8f0; vertical-align: middle; }
+        th { background-color: #f8fafc; color: #475569; font-weight: 700; }
+        
+        input[type="text"], input[type="date"], select, textarea { 
+            width: 100%; background-color: #ffffff; border: 1px solid #cbd5e1; color: #0f172a; padding: 10px; border-radius: 6px; margin-top: 4px; margin-bottom: 12px; font-size: 13px;
+        }
+        
+        .btn { background-color: #0d9488; color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 13px; transition: background 0.2s; }
+        .btn:hover { background-color: #0f766e; }
+        .btn-secondary { background-color: #e2e8f0; color: #334155; margin-left: 8px; }
+        .btn-secondary:hover { background-color: #cbd5e1; }
+        .btn-delete { background-color: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 11px; font-weight: 600; }
+        .btn-delete:hover { background-color: #fca5a5; }
+
+        .tag { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; display: inline-block; }
+        .tag-red { background: #fee2e2; color: #991b1b; }
+        .tag-amber { background: #fef3c7; color: #92400e; }
+        .tag-purple { background: #f3e8ff; color: #6b21a8; }
+        .tag-teal { background: #ccfbf1; color: #115e59; }
+        .tag-blue { background: #dbeafe; color: #1e40af; }
+
+        .score-box { text-align: center; background: #f8fafc; padding: 16px; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .score-val { font-size: 32px; font-weight: 800; }
+
+        /* EXCEL SHEET STYLING */
+        .excel-table-wrapper { overflow-x: auto; max-height: 450px; overflow-y: auto; border: 1px solid #cbd5e1; border-radius: 6px; background: #fff; }
+        .excel-table { width: 100%; border-collapse: collapse; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 12px; }
+        .excel-table th { background: #107c41; color: #ffffff; padding: 8px 12px; font-weight: 600; border: 1px solid #0d6535; position: sticky; top: 0; z-index: 10; text-align: left; }
+        .excel-table td { padding: 8px 12px; border: 1px solid #e2e8f0; white-space: nowrap; color: #334155; }
+        .excel-table tr:nth-child(even) { background-color: #f8fafc; }
+        .excel-table tr:hover { background-color: #f1f5f9; }
+        .excel-tab-bar { display: flex; gap: 2px; background: #e2e8f0; padding: 4px 4px 0 4px; border-bottom: 1px solid #cbd5e1; border-radius: 6px 6px 0 0; }
+        .excel-sheet-tab { padding: 6px 14px; font-size: 12px; font-weight: 600; color: #475569; background: #cbd5e1; border-radius: 4px 4px 0 0; cursor: pointer; border: 1px solid #cbd5e1; border-bottom: none; }
+        .excel-sheet-tab.active { background: #ffffff; color: #107c41; border-color: #cbd5e1; border-bottom: 2px solid #107c41; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div>
+            <h1 style="font-size: 18px; color: #0f172a;">Cleaning &amp; Facility Operations Dashboard</h1>
+            <p style="font-size: 12px; color: #64748b;">Live Multi-User Shift Operations Manager</p>
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center;">
+            <button class="btn btn-secondary" style="padding: 6px 12px; font-size: 12px;" onclick="exportExcelCSV()">Export All to Excel (CSV)</button>
+        </div>
+    </header>
+
+    <!-- GLOBAL FILTER BAR -->
+    <div class="filter-bar">
+        <div class="filter-item">
+            <label>Select Date:</label>
+            <input type="date" id="filter-date" onchange="applyFilter()">
+        </div>
+
+        <div class="filter-item">
+            <label>Shift Rotation:</label>
+            <div class="shift-btn-group">
+                <button type="button" class="shift-btn active" id="btn-shift-morning" onclick="selectShiftUI('Morning (7AM-3PM)')">Morning (7AM-3PM)</button>
+                <button type="button" class="shift-btn" id="btn-shift-afternoon" onclick="selectShiftUI('Afternoon (3PM-11PM)')">Afternoon (3PM-11PM)</button>
+                <button type="button" class="shift-btn" id="btn-shift-night" onclick="selectShiftUI('Night (11PM-7AM)')">Night (11PM-7AM)</button>
+            </div>
+        </div>
+
+        <div class="filter-item">
+            <label>Scheduler Name:</label>
+            <input type="text" id="filter-scheduler-input" placeholder="Enter scheduler name..." style="width: 180px !important; margin: 0 !important;" oninput="onSchedulerNameInput()">
+        </div>
+    </div>
+
+    <!-- TOP NAVIGATION BAR -->
+    <div class="nav-bar">
+        <button type="button" class="nav-btn active" id="nav-dash" onclick="switchTab('dash')">Dashboard</button>
+        <button type="button" class="nav-btn" id="nav-qfmreq" onclick="switchTab('qfmreq')">Cleaning Requests Logged</button>
+        <button type="button" class="nav-btn" id="nav-qfm" onclick="switchTab('qfm')">Portal / Tech Issues</button>
+        <button type="button" class="nav-btn" id="nav-overdue" onclick="switchTab('overdue')">Overdue Events</button>
+        <button type="button" class="nav-btn" id="nav-duplicate" onclick="switchTab('duplicate')">Duplicate &amp; Cancelled Tasks</button>
+        <button type="button" class="nav-btn" id="nav-absences" onclick="switchTab('absences')">Absences / Light Duty</button>
+        <button type="button" class="nav-btn" id="nav-hand" onclick="switchTab('hand')">Handover Report</button>
+        <button type="button" class="nav-btn" id="nav-excel" onclick="switchTab('excel')">Excel View</button>
+        <button type="button" class="nav-btn" id="nav-hist" onclick="switchTab('hist')">System Audit Log</button>
+    </div>
+
+    <main>
+        <!-- 1. DASHBOARD -->
+        <div id="panel-dash" class="tab-panel active">
+            <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%); border-color: #cbd5e1;">
+                <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+                    <div>
+                        <h2 style="font-size: 16px; color: #0f172a;">Shift Operational Performance Score</h2>
+                        <p style="font-size: 12px; color: #64748b; margin-top: 4px;">Calculated dynamically for selected shift rotation and date.</p>
+                    </div>
+                    <div class="score-box" style="min-width: 140px;">
+                        <div id="score-display" class="score-val" style="color: #0d9488;">85%</div>
+                        <div id="score-status" style="font-size: 11px; font-weight: 600; color: #0d9488; margin-top: 2px;">EXCELLENT</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid-4">
+                <div class="card"><p style="font-size: 12px; color: #64748b;">QFM Cleaning Requests</p><h3 id="stat-qfmreq" style="color: #0284c7;">1</h3></div>
+                <div class="card"><p style="font-size: 12px; color: #64748b;">System / Tech Faults</p><h3 id="stat-qfm" style="color: #dc2626;">1</h3></div>
+                <div class="card"><p style="font-size: 12px; color: #64748b;">Overdue SLA Events</p><h3 id="stat-overdue" style="color: #d97706;">0</h3></div>
+                <div class="card"><p style="font-size: 12px; color: #64748b;">Absences / Light Duty</p><h3 id="stat-absences" style="color: #9333ea;">1</h3></div>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 15px; margin-bottom: 8px;">Active Filter Target</h3>
+                <p style="font-size: 13px; color: #64748b;">
+                    Viewing Date: <strong style="color: #0d9488;" id="lbl-scope-date">2026-09-23</strong> | 
+                    Shift: <strong style="color: #0d9488;" id="lbl-scope-shift">Morning (7AM-3PM)</strong> | 
+                    Scheduler: <strong style="color: #0d9488;" id="lbl-scope-scheduler">Not Specified</strong>
+                </p>
+            </div>
+        </div>
+
+        <!-- 2. QFM CLEANING REQUESTS LOGGED -->
+        <div id="panel-qfmreq" class="tab-panel">
+            <div class="card">
+                <h2 style="font-size: 16px; margin-bottom: 12px; color: #0284c7;">Log Cleaning &amp; Maintenance Request (QFM)</h2>
+                <form onsubmit="logQFMRequest(event)">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Scheduler Name</label>
+                            <input type="text" id="qfmreq-input-scheduler" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Shift Rotation</label>
+                            <input type="text" id="qfmreq-input-shift" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">QFM Job / Task #</label>
+                            <input type="text" id="qfmreq-ref" placeholder="e.g. QFM-88102" required="">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Service Category</label>
+                            <select id="qfmreq-category">
+                                <option value="Cleaning - Urgent / Spill">Cleaning - Urgent / Spill</option>
+                                <option value="Cleaning - Routine / Ward">Cleaning - Routine / Ward</option>
+                                <option value="Maintenance &amp; Repair">Maintenance &amp; Repair</option>
+                                <option value="Biohazard / Infection Control">Biohazard / Infection Control</option>
+                                <option value="Linen / Waste Management">Linen / Waste Management</option>
+                                <option value="Other Facility Request">Other Facility Request</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Ward / Location</label>
+                            <input type="text" id="qfmreq-loc" placeholder="e.g. Ward 2 Bed 04" required="">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Assigned Cleaner</label>
+                            <input type="text" id="qfmreq-cleaner" placeholder="e.g. John D." required="">
+                        </div>
+                    </div>
+
+                    <label style="font-size:12px; color:#64748b;">Request Details / Service Description</label>
+                    <textarea id="qfmreq-desc" rows="2" placeholder="Describe the cleaning or service requested..." required=""></textarea>
+
+                    <button type="submit" class="btn">Record QFM Service Request</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Logged QFM Service Requests Queue</h3>
+                <table>
+                    <thead><tr><th>Time Stamped</th><th>Shift</th><th>Scheduler</th><th>Job #</th><th>Category</th><th>Location</th><th>Cleaner</th><th>Details</th><th style="text-align:right;">Action</th></tr></thead>
+                    <tbody id="table-qfmreq">
+                <tr><td>4:38:40 pm</td><td>Morning (7AM-3PM)</td><td>Unnamed</td><td><strong>88523</strong></td><td><span class="tag tag-blue">Cleaning - Urgent / Spill</span></td><td>04</td><td>Rupa Dahal</td><td>4455</td><td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('qfmreq', '1790145520137')">Delete</button></td></tr>
+            </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 3. PORTAL / TECH ISSUES -->
+        <div id="panel-qfm" class="tab-panel">
+            <div class="card">
+                <h2 style="font-size: 16px; margin-bottom: 12px; color: #dc2626;">Log QFM / System Technical Issue</h2>
+                <form onsubmit="logQFM(event)">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Scheduler Name</label>
+                            <input type="text" id="qfm-input-scheduler" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Shift Rotation</label>
+                            <input type="text" id="qfm-input-shift" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Technical Issue Type</label>
+                            <select id="qfm-type">
+                                <option value="Portal Dispatch Delay">Portal Dispatch Delay</option>
+                                <option value="Tablet Disconnect / Offline">Tablet Disconnect / Offline</option>
+                                <option value="Portal Crash / Logout">Portal Crash / Logout</option>
+                                <option value="System Sync Error">System Sync Error</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label style="font-size:12px; color:#64748b;">Location / Room / Ward Affected</label>
+                    <input type="text" id="qfm-location" placeholder="e.g. Ward 3 West" required="">
+
+                    <label style="font-size:12px; color:#64748b;">Detailed Description of Fault</label>
+                    <textarea id="qfm-desc" rows="2" placeholder="Describe the system issue..." required=""></textarea>
+
+                    <button type="submit" class="btn">Log System Fault</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Logged System Issues Queue</h3>
+                <table>
+                    <thead><tr><th>Time Stamped</th><th>Shift</th><th>Scheduler</th><th>Issue Type</th><th>Location</th><th>Details</th><th style="text-align:right;">Action</th></tr></thead>
+                    <tbody id="table-qfm">
+                <tr><td>4:38:58 pm</td><td>Morning (7AM-3PM)</td><td>Unnamed</td><td><span class="tag tag-red">Portal Crash / Logout</span></td><td>5552</td><td>-</td><td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('qfm', '1790145538928')">Delete</button></td></tr>
+            </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 4. OVERDUE EVENTS -->
+        <div id="panel-overdue" class="tab-panel">
+            <div class="card">
+                <h2 style="font-size: 16px; margin-bottom: 12px; color: #d97706;">Log Overdue SLA Event</h2>
+                <form onsubmit="logOverdue(event)">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Scheduler Name</label>
+                            <input type="text" id="overdue-input-scheduler" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Shift Rotation</label>
+                            <input type="text" id="overdue-input-shift" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Task / Job Reference #</label>
+                            <input type="text" id="overdue-ref" placeholder="e.g. Job #8921" required="">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Location / Ward</label>
+                            <input type="text" id="overdue-location" placeholder="e.g. ICU Bed 04" required="">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Cleaner Name</label>
+                            <input type="text" id="overdue-cleaner" placeholder="e.g. John D." required="">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Cleaner Remarks Status</label>
+                            <select id="overdue-has-remarks">
+                                <option value="Cleaner Provided Remarks">Cleaner Provided Remarks</option>
+                                <option value="No Remarks Left by Cleaner">No Remarks Left by Cleaner</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Remark Provided By</label>
+                            <select id="overdue-remark-author">
+                                <option value="Scheduler">Scheduler</option>
+                                <option value="Cleaner">Cleaner</option>
+                                <option value="Both / Joint Remark">Both / Joint Remark</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <label style="font-size:12px; color:#64748b;">Delay Reason &amp; Pending Action Notes</label>
+                    <textarea id="overdue-reason" rows="2" placeholder="Explain delay and enter cleaner/scheduler remarks..." required=""></textarea>
+
+                    <button type="submit" class="btn">Log Overdue Event</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Overdue Tasks Monitor</h3>
+                <table>
+                    <thead><tr><th>Time Stamped</th><th>Shift</th><th>Scheduler</th><th>Job #</th><th>Location</th><th>Cleaner</th><th>Remarks Left?</th><th>Remark By</th><th>Delay Reason / Notes</th><th style="text-align:right;">Action</th></tr></thead>
+                    <tbody id="table-overdue"><tr><td colspan="10" style="color:#94a3b8; text-align:center;">No entries matching current scope.</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 5. DUPLICATE & CANCELLED TASKS LOG -->
+        <div id="panel-duplicate" class="tab-panel">
+            <div class="card">
+                <h2 style="font-size: 16px; margin-bottom: 12px; color: #2563eb;">Record Duplicate Task / Job Cancellation</h2>
+                <form onsubmit="logDuplicate(event)">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Scheduler Name</label>
+                            <input type="text" id="dup-input-scheduler" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Shift Rotation</label>
+                            <input type="text" id="dup-input-shift" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Location / Ward</label>
+                            <input type="text" id="dup-location" placeholder="e.g. ED Bays 1 &amp; 2" required="">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Primary Task / Job #</label>
+                            <input type="text" id="dup-event1" placeholder="e.g. Job #4410" required="">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Duplicate / Cancelled Job # (Optional)</label>
+                            <input type="text" id="dup-event2" placeholder="e.g. Job #4415">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Reported / Requested From</label>
+                            <input type="text" id="dup-reportedby" placeholder="e.g. Ward Charge Nurse / Cleaner" required="">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Cancellation / Resolution Action</label>
+                            <select id="dup-cancel-reason" required="" onchange="toggleCustomReasonInput(this.value)">
+                                <option value="Duplicate Task Cancelled">Duplicate Task Cancelled</option>
+                                <option value="Merged into Existing Task">Merged into Existing Task</option>
+                                <option value="Client Cancelled Request">Client Cancelled Request</option>
+                                <option value="Created in Error / Invalid Location">Created in Error / Invalid Location</option>
+                                <option value="Reissued Under New Service Code">Reissued Under New Service Code</option>
+                                <option value="Other">Other (Specify below)</option>
+                            </select>
+                        </div>
+                        <div id="dup-custom-reason-container" style="display: none;">
+                            <label style="font-size:12px; color:#64748b;">Specify Custom Reason</label>
+                            <input type="text" id="dup-custom-reason" placeholder="Enter specific cancellation reason...">
+                        </div>
+                    </div>
+
+                    <label style="font-size:12px; color:#64748b;">Corrective Action Notes / Scheduler Remarks</label>
+                    <textarea id="dup-action" rows="2" placeholder="Provide notes on job cancellation or portal cleanup..."></textarea>
+
+                    <button type="submit" class="btn">Record Cancellation / Duplicate</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Duplicate &amp; Cancelled Tasks Registry</h3>
+                <table>
+                    <thead><tr><th>Time Stamped</th><th>Shift</th><th>Scheduler</th><th>Location</th><th>Primary Job #</th><th>Duplicate / Related Job #</th><th>Reported From</th><th>Action / Reason</th><th>Notes</th><th style="text-align:right;">Action</th></tr></thead>
+                    <tbody id="table-duplicate"><tr><td colspan="10" style="color:#94a3b8; text-align:center;">No entries matching current scope.</td></tr></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 6. ABSENCES / LIGHT DUTY -->
+        <div id="panel-absences" class="tab-panel">
+            <div class="card">
+                <h2 style="font-size: 16px; margin-bottom: 12px; color: #9333ea;">Staff Absence / Light Duty / Left Early Log</h2>
+                <form onsubmit="logAbsence(event)">
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Scheduler Name</label>
+                            <input type="text" id="abs-input-scheduler" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Shift Rotation</label>
+                            <input type="text" id="abs-input-shift" readonly="" style="opacity: 0.7; cursor: not-allowed; background:#f1f5f9 !important;">
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Staff Member Name</label>
+                            <input type="text" id="abs-name" placeholder="e.g. Sarah M." required="">
+                        </div>
+                    </div>
+
+                    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:12px;">
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Status Category</label>
+                            <select id="abs-type">
+                                <option value="Sick Call (Notice Given)">Sick Call (Notice Given)</option>
+                                <option value="Left Early">Left Early</option>
+                                <option value="Light Duty Assignment">Light Duty Assignment</option>
+                                <option value="No Show / Unexcused">No Show / Unexcused</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label style="font-size:12px; color:#64748b;">Light Duty / Specific Assignment (If applicable)</label>
+                            <input type="text" id="abs-lightduty" placeholder="e.g. Linen Folding / Desk duties only">
+                        </div>
+                    </div>
+
+                    <label style="font-size:12px; color:#64748b;">Coverage Plan / Details / Notes</label>
+                    <textarea id="abs-cover" rows="2" placeholder="e.g. Cover provided by Alex T. / Left early at 1:00 PM due to illness" required=""></textarea>
+
+                    <button type="submit" class="btn">Log Staff Status</button>
+                </form>
+            </div>
+
+            <div class="card">
+                <h3 style="font-size: 14px; margin-bottom: 8px;">Absence &amp; Duty Status Registry</h3>
+                <table>
+                    <thead><tr><th>Time Stamped</th><th>Shift</th><th>Scheduler</th><th>Staff Member</th><th>Category</th><th>Light Duty Restrictions</th><th>Coverage Plan &amp; Details</th><th style="text-align:right;">Action</th></tr></thead>
+                    <tbody id="table-absences">
+                <tr><td>4:39:17 pm</td><td>Morning (7AM-3PM)</td><td>Unnamed</td><td><strong>Sarah</strong></td><td><span class="tag tag-purple">Sick Call (Notice Given)</span></td><td>-</td><td>-</td><td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('absences', '1790145557984')">Delete</button></td></tr>
+            </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 7. HANDOVER REPORT -->
+        <div id="panel-hand" class="tab-panel">
+            <div class="card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 12px; flex-wrap: wrap; gap: 8px;">
+                    <div>
+                        <h2 style="font-size: 16px;">Consolidated Handover &amp; Operational Report</h2>
+                        <div style="display:flex; gap:12px; margin-top:6px;">
+                            <label style="font-size:12px; color:#475569; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                                <input type="radio" name="reportViewMode" value="shift" checked="" onchange="renderHandover()"> Single Shift View
+                            </label>
+                            <label style="font-size:12px; color:#475569; display:flex; align-items:center; gap:4px; cursor:pointer;">
+                                <input type="radio" name="reportViewMode" value="allDay" onchange="renderHandover()"> 24-Hour Full Day Manager View
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <button class="btn" onclick="copyHandover()">Copy Text Report</button>
+                        <button class="btn btn-secondary" onclick="exportExcelCSV()">Export to Excel</button>
+                    </div>
+                </div>
+                <textarea id="handover-output" style="width:100%; height:380px; background:#f8fafc; color:#0f172a; border:1px solid #cbd5e1; padding:12px; font-family:monospace; line-height: 1.5; font-size: 12px; border-radius:6px;" readonly=""></textarea>
+            </div>
+        </div>
+
+        <!-- 8. EXCEL VIEW TAB -->
+        <div id="panel-excel" class="tab-panel">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 12px;">
+                    <div>
+                        <h2 style="font-size: 16px; color: #107c41;">Interactive Excel Spreadsheet View</h2>
+                        <p style="font-size: 12px; color: #64748b; margin-top: 2px;">Filter, inspect, and analyze operations data in grid view.</p>
+                    </div>
+                    <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                        <div class="filter-item">
+                            <label>Filter Sheet Date:</label>
+                            <input type="date" id="excel-filter-date" onchange="renderExcelGrid()">
+                        </div>
+                        <div class="filter-item">
+                            <label>Shift:</label>
+                            <select id="excel-filter-shift" onchange="renderExcelGrid()">
+                                <option value="ALL">All Shifts (24 Hrs)</option>
+                                <option value="Morning (7AM-3PM)">Morning (7AM-3PM)</option>
+                                <option value="Afternoon (3PM-11PM)">Afternoon (3PM-11PM)</option>
+                                <option value="Night (11PM-7AM)">Night (11PM-7AM)</option>
+                            </select>
+                        </div>
+                        <button class="btn" style="background-color: #107c41;" onclick="exportExcelCSV()">Export CSV</button>
+                    </div>
+                </div>
+
+                <div class="excel-tab-bar">
+                    <div class="excel-sheet-tab" id="excel-tab-all" onclick="switchExcelSheet('all')">Sheet 1: All Operations</div>
+                    <div class="excel-sheet-tab" id="excel-tab-qfmreq" onclick="switchExcelSheet('qfmreq')">Sheet 2: QFM Requests</div>
+                    <div class="excel-sheet-tab" id="excel-tab-overdue" onclick="switchExcelSheet('overdue')">Sheet 3: Overdue SLA</div>
+                    <div class="excel-sheet-tab" id="excel-tab-duplicate" onclick="switchExcelSheet('duplicate')">Sheet 4: Duplicates &amp; Cancellations</div>
+                    <div class="excel-sheet-tab" id="excel-tab-absences" onclick="switchExcelSheet('absences')">Sheet 5: Absences</div>
+                    <div class="excel-sheet-tab active" id="excel-tab-qfm" onclick="switchExcelSheet('qfm')">Sheet 6: System Faults</div>
+                </div>
+
+                <div class="excel-table-wrapper">
+                    <table class="excel-table" id="excel-grid">
+                        <thead id="excel-grid-head"><tr><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Issue Type</th><th>Location</th><th>Details</th></tr></thead>
+                        <tbody id="excel-grid-body"><tr><td>2026-09-23</td><td>4:38:58 pm</td><td>Morning (7AM-3PM)</td><td>Unnamed</td><td>Portal Crash / Logout</td><td>5552</td><td>-</td></tr></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- 9. ACTIVITY LOG -->
+        <div id="panel-hist" class="tab-panel">
+            <div class="card">
+                <h2 style="font-size: 16px; margin-bottom: 12px;">System Audit History Log</h2>
+                <div id="history-container" style="font-family: monospace; font-size: 12px; color: #475569; max-height: 400px; overflow-y: auto;"><div style="padding:4px 0; border-bottom:1px solid #e2e8f0;">[2026-09-23 4:39:17 pm] (Morning (7AM-3PM) | Unnamed) Logged Staff Status: Sarah (Sick Call (Notice Given))</div><div style="padding:4px 0; border-bottom:1px solid #e2e8f0;">[2026-09-23 4:38:58 pm] (Morning (7AM-3PM) | Unnamed) Logged System Issue: Portal Crash / Logout at 5552</div><div style="padding:4px 0; border-bottom:1px solid #e2e8f0;">[2026-09-23 4:38:40 pm] (Morning (7AM-3PM) | Unnamed) Logged QFM Service Request #88523 (Cleaning - Urgent / Spill) at 04</div></div>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // FIREBASE INITIALIZATION
+        const firebaseConfig = {
+            databaseURL: "https://scheduler-ops-default-rtdb.firebaseio.com"
+        };
+        
+        let db = null;
+        let dbRef = null;
+        try {
+            firebase.initializeApp(firebaseConfig);
+            db = firebase.database();
+            dbRef = db.ref('cleaning_ops_v2');
+        } catch(e) {
+            console.log("Firebase initialized in fallback mode");
+        }
+
+        let selectedShiftUI = 'Morning (7AM-3PM)';
+        let activeScheduler = '';
+        let activeExcelSheet = 'all';
+        
+        let store = {
+            qfmreq: [],
+            qfm: [],
+            overdue: [],
+            duplicate: [],
+            absences: [],
+            history: [],
+            shiftNames: {
+                'Morning (7AM-3PM)': '',
+                'Afternoon (3PM-11PM)': '',
+                'Night (11PM-7AM)': ''
+            }
+        };
+
+        function getTodayISO() {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            return `${yyyy}-${mm}-${dd}`;
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+            const target = document.getElementById(`panel-${tabId}`);
+            if (target) target.classList.add('active');
+
+            const targetBtn = document.getElementById(`nav-${tabId}`);
+            if (targetBtn) targetBtn.classList.add('active');
+
+            localStorage.setItem('activeTab', tabId);
+
+            if (tabId === 'excel') {
+                const currentDate = document.getElementById('filter-date').value || getTodayISO();
+                document.getElementById('excel-filter-date').value = currentDate;
+                renderExcelGrid();
+            }
+        }
+
+        function selectShiftUI(shift) {
+            selectedShiftUI = shift;
+            document.getElementById('btn-shift-morning').classList.remove('active');
+            document.getElementById('btn-shift-afternoon').classList.remove('active');
+            document.getElementById('btn-shift-night').classList.remove('active');
+
+            if (shift === 'Morning (7AM-3PM)') document.getElementById('btn-shift-morning').classList.add('active');
+            if (shift === 'Afternoon (3PM-11PM)') document.getElementById('btn-shift-afternoon').classList.add('active');
+            if (shift === 'Night (11PM-7AM)') document.getElementById('btn-shift-night').classList.add('active');
+
+            activeScheduler = store.shiftNames[shift] || '';
+            document.getElementById('filter-scheduler-input').value = activeScheduler;
+            syncSchedulerUI();
+            applyFilter();
+        }
+
+        function onSchedulerNameInput() {
+            const val = document.getElementById('filter-scheduler-input').value.trim();
+            activeScheduler = val;
+            store.shiftNames[selectedShiftUI] = activeScheduler;
+            syncSchedulerUI();
+            applyFilter();
+        }
+
+        function syncSchedulerUI() {
+            ['qfmreq', 'qfm', 'overdue', 'dup', 'abs'].forEach(prefix => {
+                const schedInput = document.getElementById(`${prefix}-input-scheduler`);
+                const shiftInput = document.getElementById(`${prefix}-input-shift`);
+                if (schedInput) schedInput.value = activeScheduler;
+                if (shiftInput) shiftInput.value = selectedShiftUI;
+            });
+        }
+
+        function applyFilter() {
+            const dateVal = document.getElementById('filter-date').value;
+            if (dateVal) {
+                localStorage.setItem('selectedDate', dateVal);
+                document.getElementById('excel-filter-date').value = dateVal;
+            }
+            renderAll();
+        }
+
+        function initRealtimeSync() {
+            const savedDate = localStorage.getItem('selectedDate');
+            const initialDate = savedDate ? savedDate : getTodayISO();
+            
+            document.getElementById('filter-date').value = initialDate;
+            document.getElementById('excel-filter-date').value = initialDate;
+            
+            if (dbRef) {
+                dbRef.on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (data) {
+                        store = Object.assign(store, data);
+                        if (store.shiftNames && store.shiftNames[selectedShiftUI] !== undefined) {
+                            activeScheduler = store.shiftNames[selectedShiftUI];
+                        }
+                        document.getElementById('filter-scheduler-input').value = activeScheduler;
+                        syncSchedulerUI();
+                        renderAll();
+                    }
+                });
+            } else {
+                renderAll();
+            }
+        }
+
+        function saveData() {
+            if (dbRef) {
+                dbRef.set(store);
+            }
+            renderAll();
+        }
+
+        function addHistory(msg, scheduler, shift) {
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const time = new Date().toLocaleTimeString();
+            if (!store.history) store.history = [];
+            store.history.unshift(`[${date} ${time}] (${shift} | ${scheduler || 'Unnamed'}) ${msg}`);
+        }
+
+        function toggleCustomReasonInput(value) {
+            const container = document.getElementById('dup-custom-reason-container');
+            const customInput = document.getElementById('dup-custom-reason');
+            if (value === 'Other') {
+                container.style.display = 'block';
+                customInput.setAttribute('required', 'required');
+            } else {
+                container.style.display = 'none';
+                customInput.removeAttribute('required');
+                customInput.value = '';
+            }
+        }
+
+        function logQFMRequest(e) {
+            e.preventDefault();
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const scheduler = activeScheduler || 'Unnamed';
+            const shift = selectedShiftUI;
+            const ref = document.getElementById('qfmreq-ref').value;
+            const cat = document.getElementById('qfmreq-category').value;
+            const loc = document.getElementById('qfmreq-loc').value;
+            const cleaner = document.getElementById('qfmreq-cleaner').value;
+            const desc = document.getElementById('qfmreq-desc').value;
+            const time = new Date().toLocaleTimeString();
+            const id = Date.now().toString();
+
+            if (!store.qfmreq) store.qfmreq = [];
+            store.qfmreq.unshift({ id, date, time, shift, scheduler, ref, cat, loc, cleaner, desc });
+            addHistory(`Logged QFM Service Request #${ref} (${cat}) at ${loc}`, scheduler, shift);
+            
+            document.getElementById('qfmreq-ref').value = '';
+            document.getElementById('qfmreq-loc').value = '';
+            document.getElementById('qfmreq-cleaner').value = '';
+            document.getElementById('qfmreq-desc').value = '';
+            saveData();
+        }
+
+        function logQFM(e) {
+            e.preventDefault();
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const scheduler = activeScheduler || 'Unnamed';
+            const shift = selectedShiftUI;
+            const type = document.getElementById('qfm-type').value;
+            const loc = document.getElementById('qfm-location').value;
+            const desc = document.getElementById('qfm-desc').value;
+            const time = new Date().toLocaleTimeString();
+            const id = Date.now().toString();
+
+            if (!store.qfm) store.qfm = [];
+            store.qfm.unshift({ id, date, time, shift, scheduler, type, loc, desc });
+            addHistory(`Logged System Issue: ${type} at ${loc}`, scheduler, shift);
+            
+            document.getElementById('qfm-location').value = '';
+            document.getElementById('qfm-desc').value = '';
+            saveData();
+        }
+
+        function logOverdue(e) {
+            e.preventDefault();
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const scheduler = activeScheduler || 'Unnamed';
+            const shift = selectedShiftUI;
+            const ref = document.getElementById('overdue-ref').value;
+            const loc = document.getElementById('overdue-location').value;
+            const cleaner = document.getElementById('overdue-cleaner').value;
+            const hasRemarks = document.getElementById('overdue-has-remarks').value;
+            const remarkAuthor = document.getElementById('overdue-remark-author').value;
+            const reason = document.getElementById('overdue-reason').value;
+            const time = new Date().toLocaleTimeString();
+            const id = Date.now().toString();
+
+            if (!store.overdue) store.overdue = [];
+            store.overdue.unshift({ id, date, time, shift, scheduler, ref, loc, cleaner, hasRemarks, remarkAuthor, reason });
+            addHistory(`Logged Overdue SLA Task #${ref} at ${loc}`, scheduler, shift);
+            
+            document.getElementById('overdue-ref').value = '';
+            document.getElementById('overdue-location').value = '';
+            document.getElementById('overdue-cleaner').value = '';
+            document.getElementById('overdue-reason').value = '';
+            saveData();
+        }
+
+        function logDuplicate(e) {
+            e.preventDefault();
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const scheduler = activeScheduler || 'Unnamed';
+            const shift = selectedShiftUI;
+            const loc = document.getElementById('dup-location').value;
+            const ev1 = document.getElementById('dup-event1').value;
+            const ev2 = document.getElementById('dup-event2').value || 'N/A';
+            const rep = document.getElementById('dup-reportedby').value;
+            const selectedReason = document.getElementById('dup-cancel-reason').value;
+            const customReason = document.getElementById('dup-custom-reason').value;
+            const reason = selectedReason === 'Other' ? `Other: ${customReason}` : selectedReason;
+            const act = document.getElementById('dup-action').value || '-';
+            const time = new Date().toLocaleTimeString();
+            const id = Date.now().toString();
+
+            if (!store.duplicate) store.duplicate = [];
+            store.duplicate.unshift({ id, date, time, shift, scheduler, loc, ev1, ev2, rep, reason, act });
+            addHistory(`Logged Cancellation/Duplicate (${reason}) for Job ${ev1} at ${loc}`, scheduler, shift);
+            
+            document.getElementById('dup-location').value = '';
+            document.getElementById('dup-event1').value = '';
+            document.getElementById('dup-event2').value = '';
+            document.getElementById('dup-reportedby').value = '';
+            document.getElementById('dup-cancel-reason').value = 'Duplicate Task Cancelled';
+            toggleCustomReasonInput('Duplicate Task Cancelled');
+            document.getElementById('dup-action').value = '';
+            saveData();
+        }
+
+        function logAbsence(e) {
+            e.preventDefault();
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const scheduler = activeScheduler || 'Unnamed';
+            const shift = selectedShiftUI;
+            const name = document.getElementById('abs-name').value;
+            const type = document.getElementById('abs-type').value;
+            const lightduty = document.getElementById('abs-lightduty').value;
+            const cover = document.getElementById('abs-cover').value;
+            const time = new Date().toLocaleTimeString();
+            const id = Date.now().toString();
+
+            if (!store.absences) store.absences = [];
+            store.absences.unshift({ id, date, time, shift, scheduler, name, type, lightduty, cover });
+            addHistory(`Logged Staff Status: ${name} (${type})`, scheduler, shift);
+            
+            document.getElementById('abs-name').value = '';
+            document.getElementById('abs-lightduty').value = '';
+            document.getElementById('abs-cover').value = '';
+            saveData();
+        }
+
+        function deleteItem(type, id) {
+            if (confirm("Delete this log record?")) {
+                if (store[type] && Array.isArray(store[type])) {
+                    store[type] = store[type].filter(item => String(item.id) !== String(id));
+                }
+                addHistory(`Deleted record from ${type}`, activeScheduler, selectedShiftUI);
+                saveData();
+            }
+        }
+
+        function renderAll() {
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const shift = selectedShiftUI;
+
+            document.getElementById('lbl-scope-date').textContent = date;
+            document.getElementById('lbl-scope-shift').textContent = shift;
+            document.getElementById('lbl-scope-scheduler').textContent = activeScheduler || 'Not Specified';
+
+            const filterFn = (item) => item.date === date && item.shift === shift;
+
+            const qfmreqFiltered = (store.qfmreq || []).filter(filterFn);
+            const qfmFiltered = (store.qfm || []).filter(filterFn);
+            const overdueFiltered = (store.overdue || []).filter(filterFn);
+            const absFiltered = (store.absences || []).filter(filterFn);
+            const dupFiltered = (store.duplicate || []).filter(filterFn);
+
+            document.getElementById('stat-qfmreq').textContent = qfmreqFiltered.length;
+            document.getElementById('stat-qfm').textContent = qfmFiltered.length;
+            document.getElementById('stat-overdue').textContent = overdueFiltered.length;
+            document.getElementById('stat-absences').textContent = absFiltered.length;
+
+            let penalty = (qfmFiltered.length * 10) + (overdueFiltered.length * 15) + (absFiltered.length * 5);
+            let score = Math.max(0, 100 - penalty);
+            document.getElementById('score-display').textContent = score + '%';
+            
+            let statusText = "EXCELLENT";
+            let statusColor = "#0d9488";
+            if (score < 80) { statusText = "NEEDS ATTENTION"; statusColor = "#d97706"; }
+            if (score < 60) { statusText = "CRITICAL"; statusColor = "#dc2626"; }
+            document.getElementById('score-status').textContent = statusText;
+            document.getElementById('score-status').style.color = statusColor;
+
+            renderTable('table-qfmreq', qfmreqFiltered, item => `
+                <tr><td>${item.time}</td><td>${item.shift}</td><td>${item.scheduler}</td><td><strong>${item.ref}</strong></td><td><span class="tag tag-blue">${item.cat}</span></td><td>${item.loc}</td><td>${item.cleaner}</td><td>${item.desc}</td><td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('qfmreq', '${item.id}')">Delete</button></td></tr>
+            `, 9);
+
+            renderTable('table-qfm', qfmFiltered, item => `
+                <tr><td>${item.time}</td><td>${item.shift}</td><td>${item.scheduler}</td><td><span class="tag tag-red">${item.type}</span></td><td>${item.loc}</td><td>${item.desc}</td><td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('qfm', '${item.id}')">Delete</button></td></tr>
+            `, 7);
+
+            renderTable('table-overdue', overdueFiltered, item => `
+                <tr>
+                    <td>${item.time}</td>
+                    <td>${item.shift}</td>
+                    <td>${item.scheduler}</td>
+                    <td><strong>${item.ref}</strong></td>
+                    <td>${item.loc}</td>
+                    <td>${item.cleaner}</td>
+                    <td><span class="tag ${item.hasRemarks.includes('No') ? 'tag-red' : 'tag-teal'}">${item.hasRemarks}</span></td>
+                    <td><span class="tag ${item.remarkAuthor === 'Scheduler' ? 'tag-teal' : (item.remarkAuthor === 'Cleaner' ? 'tag-amber' : 'tag-purple')}">${item.remarkAuthor || 'N/A'}</span></td>
+                    <td>${item.reason}</td>
+                    <td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('overdue', '${item.id}')">Delete</button></td>
+                </tr>
+            `, 10);
+
+            renderTable('table-duplicate', dupFiltered, item => `
+                <tr>
+                    <td>${item.time}</td>
+                    <td>${item.shift}</td>
+                    <td>${item.scheduler}</td>
+                    <td>${item.loc}</td>
+                    <td><strong>${item.ev1}</strong></td>
+                    <td><span class="tag tag-red">${item.ev2 || 'N/A'}</span></td>
+                    <td>${item.rep}</td>
+                    <td><span class="tag tag-amber">${item.reason || 'Duplicate Task Cancelled'}</span></td>
+                    <td>${item.act || '-'}</td>
+                    <td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('duplicate', '${item.id}')">Delete</button></td>
+                </tr>
+            `, 10);
+
+            renderTable('table-absences', absFiltered, item => `
+                <tr><td>${item.time}</td><td>${item.shift}</td><td>${item.scheduler}</td><td><strong>${item.name}</strong></td><td><span class="tag tag-purple">${item.type}</span></td><td>${item.lightduty || 'None'}</td><td>${item.cover}</td><td style="text-align:right;"><button class="btn-delete" onclick="deleteItem('absences', '${item.id}')">Delete</button></td></tr>
+            `, 8);
+
+            const histElem = document.getElementById('history-container');
+            if (store.history && store.history.length > 0) {
+                histElem.innerHTML = store.history.map(h => `<div style="padding:4px 0; border-bottom:1px solid #e2e8f0;">${h}</div>`).join('');
+            } else {
+                histElem.innerHTML = '<p style="color:#94a3b8;">No audit entries logged yet.</p>';
+            }
+
+            renderHandover();
+            renderExcelGrid();
+        }
+
+        function renderTable(elementId, dataset, rowFn, colSpan) {
+            const tbody = document.getElementById(elementId);
+            if (!dataset || dataset.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${colSpan}" style="color:#94a3b8; text-align:center;">No entries matching current scope.</td></tr>`;
+            } else {
+                tbody.innerHTML = dataset.map(rowFn).join('');
+            }
+        }
+
+        function renderHandover() {
+            const date = document.getElementById('filter-date').value || getTodayISO();
+            const isAllDay = document.querySelector('input[name="reportViewMode"]:checked').value === 'allDay';
+            const shift = selectedShiftUI;
+
+            const filterFn = (item) => isAllDay ? (item.date === date) : (item.date === date && item.shift === shift);
+
+            const qfmreqList = (store.qfmreq || []).filter(filterFn);
+            const qfmList = (store.qfm || []).filter(filterFn);
+            const overdueList = (store.overdue || []).filter(filterFn);
+            const dupList = (store.duplicate || []).filter(filterFn);
+            const absList = (store.absences || []).filter(filterFn);
+
+            let report = `====================================================\n`;
+            report += `CLEANING & FACILITY OPERATIONS HANDOVER REPORT\n`;
+            report += `DATE: ${date}\n`;
+            report += `SCOPE: ${isAllDay ? 'FULL 24-HOUR ALL-SHIFTS SUMMARY' : shift}\n`;
+            report += `SCHEDULER: ${isAllDay ? 'All Shift Schedulers' : (activeScheduler || 'N/A')}\n`;
+            report += `====================================================\n\n`;
+
+            report += `1. QFM CLEANING & SERVICE REQUESTS (${qfmreqList.length})\n`;
+            if (qfmreqList.length === 0) report += `   - None logged.\n`;
+            else qfmreqList.forEach(i => report += `   • [${i.time}] (${i.shift}) Ref #${i.ref} | ${i.cat} | Loc: ${i.loc} | Cleaner: ${i.cleaner} -> ${i.desc}\n`);
+            report += `\n`;
+
+            report += `2. OVERDUE SLA EVENTS (${overdueList.length})\n`;
+            if (overdueList.length === 0) report += `   - None logged.\n`;
+            else overdueList.forEach(i => report += `   • [${i.time}] (${i.shift}) Ref #${i.ref} | Loc: ${i.loc} | Cleaner: ${i.cleaner} | Remarks: ${i.hasRemarks} [Remark By: ${i.remarkAuthor || 'N/A'}] -> ${i.reason}\n`);
+            report += `\n`;
+
+            report += `3. DUPLICATE & CANCELLED TASKS (${dupList.length})\n`;
+            if (dupList.length === 0) report += `   - None logged.\n`;
+            else dupList.forEach(i => report += `   • [${i.time}] (${i.shift}) Loc: ${i.loc} | Primary: ${i.ev1} | Duplicate/Related: ${i.ev2 || 'N/A'} | Action/Reason: ${i.reason || 'Duplicate Task Cancelled'} | Requested By: ${i.rep} -> Notes: ${i.act || '-'}\n`);
+            report += `\n`;
+
+            report += `4. STAFF ABSENCES & LIGHT DUTY (${absList.length})\n`;
+            if (absList.length === 0) report += `   - None logged.\n`;
+            else absList.forEach(i => report += `   • [${i.time}] (${i.shift}) Staff: ${i.name} | Status: ${i.type} | Light Duty Notes: ${i.lightduty || 'None'} -> Coverage: ${i.cover}\n`);
+            report += `\n`;
+
+            report += `5. SYSTEM & PORTAL TECH ISSUES (${qfmList.length})\n`;
+            if (qfmList.length === 0) report += `   - None logged.\n`;
+            else qfmList.forEach(i => report += `   • [${i.time}] (${i.shift}) Issue: ${i.type} | Loc: ${i.loc} -> Details: ${i.desc}\n`);
+
+            document.getElementById('handover-output').value = report;
+        }
+
+        function switchExcelSheet(sheet) {
+            activeExcelSheet = sheet;
+            document.querySelectorAll('.excel-sheet-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(`excel-tab-${sheet}`).classList.add('active');
+            renderExcelGrid();
+        }
+
+        function renderExcelGrid() {
+            const dateInput = document.getElementById('excel-filter-date').value || getTodayISO();
+            const shiftInput = document.getElementById('excel-filter-shift').value;
+
+            const filterFn = (item) => {
+                const matchDate = (item.date === dateInput);
+                const matchShift = (shiftInput === 'ALL' || item.shift === shiftInput);
+                return matchDate && matchShift;
+            };
+
+            const thead = document.getElementById('excel-grid-head');
+            const tbody = document.getElementById('excel-grid-body');
+
+            if (activeExcelSheet === 'all') {
+                thead.innerHTML = `<tr><th>Module</th><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Ref / Name</th><th>Category / Reason</th><th>Location</th><th>Details / Notes</th></tr>`;
+                
+                let combined = [
+                    ...(store.qfmreq || []).filter(filterFn).map(i => ({ mod: 'QFM Request', date: i.date, time: i.time, shift: i.shift, sched: i.scheduler, ref: i.ref, cat: i.cat, loc: i.loc, desc: i.desc })),
+                    ...(store.overdue || []).filter(filterFn).map(i => ({ mod: 'Overdue SLA', date: i.date, time: i.time, shift: i.shift, sched: i.scheduler, ref: i.ref, cat: i.hasRemarks, loc: i.loc, desc: `${i.cleaner} - ${i.reason}` })),
+                    ...(store.duplicate || []).filter(filterFn).map(i => ({ mod: 'Duplicate Task', date: i.date, time: i.time, shift: i.shift, sched: i.scheduler, ref: i.ev1, cat: i.reason || 'Duplicate', loc: i.loc, desc: `Dup #: ${i.ev2 || 'N/A'} | ${i.act || '-'}` })),
+                    ...(store.absences || []).filter(filterFn).map(i => ({ mod: 'Staff Absence', date: i.date, time: i.time, shift: i.shift, sched: i.scheduler, ref: i.name, cat: i.type, loc: 'N/A', desc: `${i.lightduty || ''} - ${i.cover}` })),
+                    ...(store.qfm || []).filter(filterFn).map(i => ({ mod: 'System Fault', date: i.date, time: i.time, shift: i.shift, sched: i.scheduler, ref: 'N/A', cat: i.type, loc: i.loc, desc: i.desc }))
+                ];
+
+                if (combined.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#94a3b8;">No records found for selected date and shift filters.</td></tr>`;
+                } else {
+                    tbody.innerHTML = combined.map(i => `<tr><td><strong>${i.mod}</strong></td><td>${i.date}</td><td>${i.time}</td><td>${i.shift}</td><td>${i.sched}</td><td>${i.ref}</td><td>${i.cat}</td><td>${i.loc}</td><td>${i.desc}</td></tr>`).join('');
+                }
+            } else if (activeExcelSheet === 'qfmreq') {
+                thead.innerHTML = `<tr><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Job Ref #</th><th>Category</th><th>Location</th><th>Cleaner</th><th>Description</th></tr>`;
+                const data = (store.qfmreq || []).filter(filterFn);
+                if (data.length === 0) tbody.innerHTML = `<tr><td colspan="9" style="text-align:center; color:#94a3b8;">No QFM Service Requests found.</td></tr>`;
+                else tbody.innerHTML = data.map(i => `<tr><td>${i.date}</td><td>${i.time}</td><td>${i.shift}</td><td>${i.scheduler}</td><td>${i.ref}</td><td>${i.cat}</td><td>${i.loc}</td><td>${i.cleaner}</td><td>${i.desc}</td></tr>`).join('');
+            } else if (activeExcelSheet === 'overdue') {
+                thead.innerHTML = `<tr><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Job Ref #</th><th>Location</th><th>Cleaner</th><th>Remarks Left?</th><th>Remark Author</th><th>Reason</th></tr>`;
+                const data = (store.overdue || []).filter(filterFn);
+                if (data.length === 0) tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No Overdue SLA records found.</td></tr>`;
+                else tbody.innerHTML = data.map(i => `<tr><td>${i.date}</td><td>${i.time}</td><td>${i.shift}</td><td>${i.scheduler}</td><td>${i.ref}</td><td>${i.loc}</td><td>${i.cleaner}</td><td>${i.hasRemarks}</td><td>${i.remarkAuthor || 'N/A'}</td><td>${i.reason}</td></tr>`).join('');
+            } else if (activeExcelSheet === 'duplicate') {
+                thead.innerHTML = `<tr><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Location</th><th>Primary Job #</th><th>Duplicate/Related #</th><th>Action/Reason</th><th>Reported From</th><th>Notes</th></tr>`;
+                const data = (store.duplicate || []).filter(filterFn);
+                if (data.length === 0) tbody.innerHTML = `<tr><td colspan="10" style="text-align:center; color:#94a3b8;">No Duplicate Tasks found.</td></tr>`;
+                else tbody.innerHTML = data.map(i => `<tr><td>${i.date}</td><td>${i.time}</td><td>${i.shift}</td><td>${i.scheduler}</td><td>${i.loc}</td><td>${i.ev1}</td><td>${i.ev2 || 'N/A'}</td><td>${i.reason || 'Duplicate Task Cancelled'}</td><td>${i.rep}</td><td>${i.act || '-'}</td></tr>`).join('');
+            } else if (activeExcelSheet === 'absences') {
+                thead.innerHTML = `<tr><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Staff Name</th><th>Category</th><th>Light Duty</th><th>Coverage Plan</th></tr>`;
+                const data = (store.absences || []).filter(filterFn);
+                if (data.length === 0) tbody.innerHTML = `<tr><td colspan="8" style="text-align:center; color:#94a3b8;">No Staff Absences found.</td></tr>`;
+                else tbody.innerHTML = data.map(i => `<tr><td>${i.date}</td><td>${i.time}</td><td>${i.shift}</td><td>${i.scheduler}</td><td>${i.name}</td><td>${i.type}</td><td>${i.lightduty || 'N/A'}</td><td>${i.cover}</td></tr>`).join('');
+            } else if (activeExcelSheet === 'qfm') {
+                thead.innerHTML = `<tr><th>Date</th><th>Time</th><th>Shift</th><th>Scheduler</th><th>Issue Type</th><th>Location</th><th>Details</th></tr>`;
+                const data = (store.qfm || []).filter(filterFn);
+                if (data.length === 0) tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; color:#94a3b8;">No System Fault records found.</td></tr>`;
+                else tbody.innerHTML = data.map(i => `<tr><td>${i.date}</td><td>${i.time}</td><td>${i.shift}</td><td>${i.scheduler}</td><td>${i.type}</td><td>${i.loc}</td><td>${i.desc}</td></tr>`).join('');
+            }
+        }
+
+        function copyHandover() {
+            const txt = document.getElementById('handover-output');
+            txt.select();
+            document.execCommand('copy');
+            alert('Handover report copied to clipboard!');
+        }
+
+        function exportExcelCSV() {
+            const selectedDate = document.getElementById('filter-date').value || getTodayISO();
+            const filterFn = (item) => item.date === selectedDate;
+
+            let csv = `Cleaning Operations Shift Report - ${selectedDate}\n\n`;
+
+            csv += `QFM Service Requests\nTime,Shift,Scheduler,Job Ref,Category,Location,Cleaner,Description\n`;
+            (store.qfmreq || []).filter(filterFn).forEach(i => {
+                csv += `"${i.time}","${i.shift}","${i.scheduler}","${i.ref}","${i.cat}","${i.loc}","${i.cleaner}","${(i.desc||'').replace(/"/g, '""')}"\n`;
+            });
+
+            csv += `\nOverdue SLA Events\nTime,Shift,Scheduler,Job Ref,Location,Cleaner,Remarks Status,Remark By,Reason Notes\n`;
+            (store.overdue || []).filter(filterFn).forEach(i => {
+                csv += `"${i.time}","${i.shift}","${i.scheduler}","${i.ref}","${i.loc}","${i.cleaner}","${i.hasRemarks}","${i.remarkAuthor || 'N/A'}","${(i.reason||'').replace(/"/g, '""')}"\n`;
+            });
+
+            csv += `\nDuplicate & Cancelled Tasks\nTime,Shift,Scheduler,Location,Primary Job,Duplicate/Related Job,Action/Reason,Reported From,Notes\n`;
+            (store.duplicate || []).filter(filterFn).forEach(i => {
+                csv += `"${i.time}","${i.shift}","${i.scheduler}","${i.loc}","${i.ev1}","${i.ev2 || 'N/A'}","${i.reason || 'Duplicate Task Cancelled'}","${i.rep}","${(i.act||'').replace(/"/g, '""')}"\n`;
+            });
+
+            csv += `\nStaff Absences & Light Duty\nTime,Shift,Scheduler,Staff Name,Status Category,Light Duty Restrictions,Coverage Plan\n`;
+            (store.absences || []).filter(filterFn).forEach(i => {
+                csv += `"${i.time}","${i.shift}","${i.scheduler}","${i.name}","${i.type}","${(i.lightduty||'').replace(/"/g, '""')}","${(i.cover||'').replace(/"/g, '""')}"\n`;
+            });
+
+            csv += `\nSystem & Portal Tech Issues\nTime,Shift,Scheduler,Issue Type,Location,Details\n`;
+            (store.qfm || []).filter(filterFn).forEach(i => {
+                csv += `"${i.time}","${i.shift}","${i.scheduler}","${i.type}","${i.loc}","${(i.desc||'').replace(/"/g, '""')}"\n`;
+            });
+
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Cleaning_Operations_Report_${selectedDate}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // RESTORE ACTIVE TAB & SAVED DATE ON LOAD
+        window.onload = function() {
+            initRealtimeSync();
+
+            const savedTab = localStorage.getItem('activeTab');
+            if (savedTab) {
+                switchTab(savedTab);
+            }
+        };
+    </script>
+<script>
+// ==========================================
+// CONFIGURATION: Replace with your SheetDB API URL
+// ==========================================
+const SHEETDB_API_URL = "https://sheetdb.io/api/v1/YOUR_API_ID";
+
+// Helper: Send POST request to SheetDB
+async function sendToSheetDB(dataObject, sheetName = null) {
+  try {
+    let url = SHEETDB_API_URL;
+    if (sheetName) url += `?sheet=${encodeURIComponent(sheetName)}`;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ data: [dataObject] })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error saving to SheetDB:", error);
+    alert("Failed to sync record to Google Sheets.");
+  }
+}
+
+// Helper: Delete row from SheetDB by unique ID
+async function deleteFromSheetDB(id, sheetName = null) {
+  try {
+    let url = `${SHEETDB_API_URL}/ID/${id}`;
+    if (sheetName) url += `?sheet=${encodeURIComponent(sheetName)}`;
+
+    const response = await fetch(url, { method: "DELETE" });
+    return await response.json();
+  } catch (error) {
+    console.error("Error deleting from SheetDB:", error);
+  }
+}
+
+// Global Delete Function (Handles both UI and SheetDB)
+async function deleteItem(sheetName, id, buttonEl) {
+  if (confirm("Are you sure you want to delete this record?")) {
+    if (buttonEl) {
+      const row = buttonEl.closest("tr");
+      if (row) row.remove();
+    }
+    await deleteFromSheetDB(id, sheetName);
+  }
+}
+
+// ==========================================
+// 1. LOG CLEANING REQUEST (QFM)
+// ==========================================
+async function logQFMRequest(event) {
+  event.preventDefault();
+  
+  const id = Date.now().toString();
+  const payload = {
+    ID: id,
+    Timestamp: new Date().toLocaleTimeString(),
+    Date: document.getElementById("filter-date").value || new Date().toISOString().split("T")[0],
+    Shift: document.getElementById("lbl-scope-shift").innerText,
+    Scheduler: document.getElementById("filter-scheduler-input").value || "Unnamed",
+    JobNumber: document.getElementById("qfmreq-ref").value,
+    Category: document.getElementById("qfmreq-category").value,
+    Location: document.getElementById("qfmreq-loc").value,
+    Cleaner: document.getElementById("qfmreq-cleaner").value,
+    Details: document.getElementById("qfmreq-desc").value
+  };
+
+  await sendToSheetDB(payload, "CleaningRequests");
+
+  const tbody = document.getElementById("table-qfmreq");
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${payload.Timestamp}</td>
+    <td>${payload.Shift}</td>
+    <td>${payload.Scheduler}</td>
+    <td><strong>${payload.JobNumber}</strong></td>
+    <td><span class="tag tag-blue">${payload.Category}</span></td>
+    <td>${payload.Location}</td>
+    <td>${payload.Cleaner}</td>
+    <td>${payload.Details}</td>
+    <td style="text-align:right;">
+      <button class="btn-delete" onclick="deleteItem('CleaningRequests', '${id}', this)">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(newRow);
+  event.target.reset();
+}
+
+// ==========================================
+// 2. LOG TECH ISSUE / PORTAL FAULT
+// ==========================================
+async function logQFM(event) {
+  event.preventDefault();
+
+  const id = Date.now().toString();
+  const payload = {
+    ID: id,
+    Timestamp: new Date().toLocaleTimeString(),
+    Date: document.getElementById("filter-date").value || new Date().toISOString().split("T")[0],
+    Shift: document.getElementById("lbl-scope-shift").innerText,
+    Scheduler: document.getElementById("filter-scheduler-input").value || "Unnamed",
+    IssueType: document.getElementById("qfm-type").value,
+    Location: document.getElementById("qfm-location").value,
+    Details: document.getElementById("qfm-desc").value
+  };
+
+  await sendToSheetDB(payload, "TechIssues");
+
+  const tbody = document.getElementById("table-qfm");
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${payload.Timestamp}</td>
+    <td>${payload.Shift}</td>
+    <td>${payload.Scheduler}</td>
+    <td><span class="tag tag-red">${payload.IssueType}</span></td>
+    <td>${payload.Location}</td>
+    <td>${payload.Details}</td>
+    <td style="text-align:right;">
+      <button class="btn-delete" onclick="deleteItem('TechIssues', '${id}', this)">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(newRow);
+  event.target.reset();
+}
+
+// ==========================================
+// 3. LOG OVERDUE SLA EVENT
+// ==========================================
+async function logOverdue(event) {
+  event.preventDefault();
+
+  const id = Date.now().toString();
+  const payload = {
+    ID: id,
+    Timestamp: new Date().toLocaleTimeString(),
+    Date: document.getElementById("filter-date").value || new Date().toISOString().split("T")[0],
+    Shift: document.getElementById("lbl-scope-shift").innerText,
+    Scheduler: document.getElementById("filter-scheduler-input").value || "Unnamed",
+    JobNumber: document.getElementById("overdue-ref").value,
+    Location: document.getElementById("overdue-location").value,
+    Cleaner: document.getElementById("overdue-cleaner").value,
+    RemarksStatus: document.getElementById("overdue-has-remarks").value,
+    RemarkBy: document.getElementById("overdue-remark-author").value,
+    Reason: document.getElementById("overdue-reason").value
+  };
+
+  await sendToSheetDB(payload, "OverdueEvents");
+
+  const tbody = document.getElementById("table-overdue");
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${payload.Timestamp}</td>
+    <td>${payload.Shift}</td>
+    <td>${payload.Scheduler}</td>
+    <td><strong>${payload.JobNumber}</strong></td>
+    <td>${payload.Location}</td>
+    <td>${payload.Cleaner}</td>
+    <td>${payload.RemarksStatus}</td>
+    <td>${payload.RemarkBy}</td>
+    <td>${payload.Reason}</td>
+    <td style="text-align:right;">
+      <button class="btn-delete" onclick="deleteItem('OverdueEvents', '${id}', this)">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(newRow);
+  event.target.reset();
+}
+
+// ==========================================
+// 4. LOG DUPLICATE / CANCELLED TASK
+// ==========================================
+async function logDuplicate(event) {
+  event.preventDefault();
+
+  const id = Date.now().toString();
+  const reasonSelect = document.getElementById("dup-cancel-reason").value;
+  const customReason = document.getElementById("dup-custom-reason").value;
+
+  const payload = {
+    ID: id,
+    Timestamp: new Date().toLocaleTimeString(),
+    Date: document.getElementById("filter-date").value || new Date().toISOString().split("T")[0],
+    Shift: document.getElementById("lbl-scope-shift").innerText,
+    Scheduler: document.getElementById("filter-scheduler-input").value || "Unnamed",
+    Location: document.getElementById("dup-location").value,
+    PrimaryJob: document.getElementById("dup-event1").value,
+    DuplicateJob: document.getElementById("dup-event2").value || "-",
+    ReportedBy: document.getElementById("dup-reportedby").value,
+    Reason: reasonSelect === "Other" ? customReason : reasonSelect,
+    Notes: document.getElementById("dup-action").value || "-"
+  };
+
+  await sendToSheetDB(payload, "Duplicates");
+
+  const tbody = document.getElementById("table-duplicate");
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${payload.Timestamp}</td>
+    <td>${payload.Shift}</td>
+    <td>${payload.Scheduler}</td>
+    <td>${payload.Location}</td>
+    <td><strong>${payload.PrimaryJob}</strong></td>
+    <td>${payload.DuplicateJob}</td>
+    <td>${payload.ReportedBy}</td>
+    <td><span class="tag tag-amber">${payload.Reason}</span></td>
+    <td>${payload.Notes}</td>
+    <td style="text-align:right;">
+      <button class="btn-delete" onclick="deleteItem('Duplicates', '${id}', this)">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(newRow);
+  event.target.reset();
+}
+
+// ==========================================
+// 5. LOG ABSENCE / LIGHT DUTY
+// ==========================================
+async function logAbsence(event) {
+  event.preventDefault();
+
+  const id = Date.now().toString();
+  const payload = {
+    ID: id,
+    Timestamp: new Date().toLocaleTimeString(),
+    Date: document.getElementById("filter-date").value || new Date().toISOString().split("T")[0],
+    Shift: document.getElementById("lbl-scope-shift").innerText,
+    Scheduler: document.getElementById("filter-scheduler-input").value || "Unnamed",
+    StaffName: document.getElementById("abs-name").value,
+    Category: document.getElementById("abs-type").value,
+    LightDuty: document.getElementById("abs-lightduty").value || "-",
+    Details: document.getElementById("abs-cover").value
+  };
+
+  await sendToSheetDB(payload, "Absences");
+
+  const tbody = document.getElementById("table-absences");
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${payload.Timestamp}</td>
+    <td>${payload.Shift}</td>
+    <td>${payload.Scheduler}</td>
+    <td><strong>${payload.StaffName}</strong></td>
+    <td><span class="tag tag-purple">${payload.Category}</span></td>
+    <td>${payload.LightDuty}</td>
+    <td>${payload.Details}</td>
+    <td style="text-align:right;">
+      <button class="btn-delete" onclick="deleteItem('Absences', '${id}', this)">Delete</button>
+    </td>
+  `;
+  tbody.appendChild(newRow);
+  event.target.reset();
+}
+
+// UI Helper: Toggle custom cancellation reason field
+function toggleCustomReasonInput(val) {
+  const container = document.getElementById("dup-custom-reason-container");
+  if (container) {
+    container.style.display = val === "Other" ? "block" : "none";
+  }
+}
+</script>
+</body>
